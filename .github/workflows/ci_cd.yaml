@@ -9,10 +9,13 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    name: Compile
+    name: Compile with mix test, format, dialyzer & unused deps check
     env:
       MIX_ENV: test
     steps:
+      - name: Check unused dependencies 
+        run: mix deps.unlock --check-unused
+
       - uses: actions/checkout@v4
 
       - name: Setup Elixir
