@@ -13,6 +13,11 @@ jobs:
     env:
       MIX_ENV: test
     steps:
+      
+      - name: Get dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true' 
+        run: mix deps.get
+
       - uses: actions/checkout@v4
 
       - name: Setup Elixir
@@ -20,9 +25,6 @@ jobs:
         with:
           version-file: .tool-versions 
           version-type: strict
-
-      - name: Get dependencies 
-        run: mix deps.get
 
       - run: mix compile --warnings-as-errors
 
