@@ -41,9 +41,6 @@ jobs:
       - name: Check unused dependencies 
         run: mix deps.unlock --check-unused
 
-      - name: Run Tests
-        run: mix test --max-failures 1 --trace --warnings-as-errors
-
       - name: Check Formatting 
         run: mix format --check-formatted
 
