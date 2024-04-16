@@ -13,11 +13,6 @@ jobs:
     env:
       MIX_ENV: test
     steps:
-      
-      - name: Get dependencies
-        if: steps.cache-deps.outputs.cache-hit != 'true' 
-        run: mix deps.get
-
       - uses: actions/checkout@v4
 
       - name: Setup Elixir
@@ -25,8 +20,6 @@ jobs:
         with:
           version-file: .tool-versions 
           version-type: strict
-
-      - run: mix compile --warnings-as-errors
 
       - name: Cache deps directory
         uses: actions/cache@v4
@@ -38,3 +31,9 @@ jobs:
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-mix-
+
+      - name: Get dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: mix deps.get
+
+      - run: mix compile --warnings-as-errors
