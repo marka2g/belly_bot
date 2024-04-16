@@ -1,5 +1,3 @@
-# in ci_cd.yaml
-
 name: CI/CD Elixir
 
 on:
@@ -7,21 +5,22 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # workflow_dispatch - only run on the main branch 
   workflow_dispatch:
 
 env:
-  OTP_VRSN: 26.2.4
-  ELIXIR_VRSN: 1.16.2
-  MIX_ENV: test
+  OTP_VERSION: 26.2.4
+  ELIXIR_VERSION: 1.16.2
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-    name: Compile with mix test, format, dialyzer & unused deps check
+    name: Compile with mix test, format & unused deps check
     env:
       MIX_ENV: test
     services:
       postgres:
+        # image: postgis/postgis
         image: postgres:16.2
         env:
           POSTGRES_PASSWORD: postgres
@@ -35,11 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Elixir
+      - name: Setup Elixir ${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}
         uses: erlef/setup-beam@v1.17.3
         with:
-          version-file: .tool-versions 
-          version-type: strict
+          otp-version: ${{ env.OTP_VERSION }}
+          elixir-version: ${{ env.ELIXIR_VERSION }}
 
       - name: Cache Deps Directory
         uses: actions/cache@v4
@@ -52,45 +51,65 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mix-
 
+      - name: Cache plt Files for Dialyzer
+        uses: actions/cache@v4
+        env: 
+          EX_OTP_VERSIONS: ${{ steps.setup-beam.outputs.elixir-version }}
+          KEY_BASE: plt-${{ runner.os }}-${{ env.EX_OTP_VERSIONS }}
+        with:
+          path: |
+            priv/plts
+          key: |
+            ${{ env.KEY_BASE }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ env.KEY_BASE }}-
+
       - name: Get Dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: mix deps.get
 
       - run: mix compile --warnings-as-errors
 
-      - name: Check unused dependencies 
-        run: mix deps.unlock --check-unused
+      - name: Run Tests
+        run: mix test --max-failures 1 --trace --warnings-as-errors
 
-      - name: Check Formatting 
+      - name: Check Code Formatting
         run: mix format --check-formatted
 
-      - name: Run Dialyzer for Static Analysis 
-        run: mix dialyzer --format github
+      - name: Dialyzer Static Analysis
+        run: MIX_ENV=dev mix dialyzer --format github
+
+      - name: Checks for Unused Deps
+        run: mix deps.unlock --check-unused
 
   build-push:
     runs-on: ubuntu-latest
     needs: ci
-    name: Build Docker image & push to ghcr.io
+    name: Build Docker Image & Push to ghcr.io Repo
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Login to GHCR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_PAT }}
 
-      - name: Docker meta
+      - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/marka2g/belly_bot
           tags: |
-            type=ref,event=pr
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=long
+            type=ref,event=pr
+            type=sha,format=short
+
+      - name: Parse Versions from .tool-versions
+        id: parse-asdf
+        run: ./scripts/versions.sh
 
       - uses: docker/setup-buildx-action@v3
 
@@ -108,4 +127,6 @@ jobs:
           push: true
           build-args: |
             ELIXIR_VERSION=${{ env.ELIXIR_VERSION }}
-            OTP_VERSION=${{ env.ERLANG_VERSION }}
+            OTP_VERSION=${{ env.OTP_VERSION }}
+
+

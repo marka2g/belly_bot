@@ -7,6 +7,12 @@ This app answers the question, "what should we eat for lunch today?" by helping 
 
 ---
 
+although much of the initial code added to this repo was boilerplate, it's important to highlight the parts in isolation.
+...
+
+
+---
+
 ### Guideline Notes
 #### **Production Readiness**
 > This project utilizes:
