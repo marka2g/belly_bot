@@ -13,9 +13,6 @@ jobs:
     env:
       MIX_ENV: test
     steps:
-      - name: Check unused dependencies 
-        run: mix deps.unlock --check-unused
-
       - uses: actions/checkout@v4
 
       - name: Setup Elixir
@@ -40,6 +37,9 @@ jobs:
         run: mix deps.get
 
       - run: mix compile --warnings-as-errors
+
+      - name: Check unused dependencies 
+        run: mix deps.unlock --check-unused
 
       - name: Run Tests
         run: mix test --max-failures 1 --trace --warnings-as-errors
