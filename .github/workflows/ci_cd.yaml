@@ -52,7 +52,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mix-
 
-      - name: Cache plt files
+      - name: Cache plt Files
         uses: actions/cache@v4
         env: 
           EX_OTP_VERSIONS: ${{ steps.setup-beam.outputs.elixir-version }}
@@ -65,28 +65,28 @@ jobs:
           restore-keys: |
             ${{ env.KEY_BASE }}-
 
-      - name: Get dependencies
+      - name: Get Dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: mix deps.get
 
       - run: mix compile --warnings-as-errors
 
-      - name: Run tests
+      - name: Run Tests
         run: mix test --max-failures 1 --trace --warnings-as-errors
 
-      - name: Check code is formatted
+      - name: Check Code Formatting
         run: mix format --check-formatted
 
-      - name: Dialyzer static analysis
+      - name: Dialyzer Static Analysis
         run: MIX_ENV=dev mix dialyzer --format github
 
-      - name: Checks unused dependencies
+      - name: Checks Unused Dependencies
         run: mix deps.unlock --check-unused
 
   build-push:
     runs-on: ubuntu-latest
     needs: ci
-    name: Build Docker image & push to ghcr.io
+    name: Build Docker Image & Push to ghcr.io
     steps:
       - uses: actions/checkout@v3
 
@@ -97,7 +97,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_PAT }}
 
-      - name: Docker meta
+      - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
         with:
