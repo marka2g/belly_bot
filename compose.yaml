@@ -1,0 +1,50 @@
+version: "3.9"
+
+name: belly_bot
+
+services:
+  db:
+    image: postgres:16.2
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username=postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT:-5432}
+
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/marka2g/belly_bot:latest}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      DATABASE_URL: ecto://postgres:postgres@db/postgres
+      SECRET_KEY_BASE: kMydmgltmXlS+ZfhBqCxwb5JQUaCMPyl04uXVTcsZMJBTcEk4TphMeHxf+eLxspt
+      PHX_HOST: "localhost"
+    ports:
+      - 4000:4000
+    command: >
+      bash -c "bin/migrate && \
+              bin/server"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
