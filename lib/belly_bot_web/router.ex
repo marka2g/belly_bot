@@ -17,7 +17,9 @@ defmodule BellyBotWeb.Router do
   scope "/", BellyBotWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", FoodTruckLive.Index, :index
+    live "/food_trucks/:id", FoodTruckLive.Show, :show
+    live "/food_trucks/:id/show/edit", FoodTruckLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

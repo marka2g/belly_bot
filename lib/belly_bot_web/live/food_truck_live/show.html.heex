@@ -1,0 +1,16 @@
+<.header>
+  <%= @food_truck.name %> Food Truck
+</.header>
+
+<.list>
+  <:item title="Facility type"><%= @food_truck.facility_type %></:item>
+  <:item title="Food items"><%= @food_truck.food_items %></:item>
+  <:item title="Days hours"><%= @food_truck.days_hours %></:item>
+  <:item title="Street"><%= @food_truck.street %></:item>
+  <:item title="Schedule"><.link href={@food_truck.schedule} target="blank"><.icon name="hero-link" class="h-4 w-4" /> to pdf</.link></:item>
+  <:item title="Lat"><%= @food_truck.lat %></:item>
+  <:item title="Lng"><%= @food_truck.lng %></:item>
+  <:item title="Status"><%= @food_truck.status %></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to Food Trucks</.back>
