@@ -11,8 +11,7 @@ defmodule BellyBot.FoodTrucksFixtures do
   Generate a food_truck.
   """
   def food_truck_fixture(attrs \\ %{}) do
-
-    attrs = 
+    attrs =
       attrs
       |> Enum.into(%{
         days_hours: "some days_hours",
@@ -35,4 +34,3 @@ defmodule BellyBot.FoodTrucksFixtures do
     food_truck
   end
 end
-

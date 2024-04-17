@@ -19,9 +19,9 @@ defmodule BellyBot.FoodTrucks.FoodTruck do
 
   @required_keys [:name, :status, :lng, :lat, :location]
   @optional_keys [
-    :food_items, 
-    :facility_type, 
-    :street, 
+    :food_items,
+    :facility_type,
+    :street,
     :days_hours,
     :schedule
   ]
