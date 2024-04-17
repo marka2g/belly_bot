@@ -41,7 +41,7 @@ jobs:
           otp-version: ${{ env.OTP_VERSION }}
           elixir-version: ${{ env.ELIXIR_VERSION }}
 
-      - name: Cache deps directory
+      - name: Cache Deps Directory
         uses: actions/cache@v4
         id: cache-deps
         with:
