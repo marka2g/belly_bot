@@ -8,8 +8,6 @@ defmodule BellyBot.FoodTrucks do
 
   alias BellyBot.FoodTrucks.FoodTruck
 
-  @sf_food_truck_url "https://data.sfgov.org/resource/rqzj-sfat.json"
-
   @doc """
   Returns the list of food_trucks.
 
