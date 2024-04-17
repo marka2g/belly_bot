@@ -1,7 +1,3 @@
-version: "3.9"
-
-name: belly_bot
-
 services:
   db:
     image: postgres:16.2
@@ -24,7 +20,6 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - ${POSTGRES_PORT:-5432}
-
   web:
     image: ${WEB_IMAGE:-ghcr.io/marka2g/belly_bot:latest}
     deploy:
@@ -42,9 +37,8 @@ services:
       - 4000:4000
     command: >
       bash -c "bin/migrate && \
-              bin/server"
+              bin/server" 
     depends_on:
       - db
-
 volumes:
   db_data:

@@ -1,0 +1,19 @@
+<.header>
+  Listing Food Trucks
+</.header>
+
+<.table
+  id="food_trucks"
+  rows={@streams.food_trucks}
+  row_click={fn {_id, food_truck} -> JS.navigate(~p"/food_trucks/#{food_truck}") end}
+>
+  <:col :let={{_id, food_truck}} label="Name"><%= food_truck.name %></:col>
+  <:col :let={{_id, food_truck}} label="Food Items"><%= food_truck.food_items %></:col>
+  <:col :let={{_id, food_truck}} label="Street"><%= food_truck.street %></:col>
+  <:col :let={{_id, food_truck}} label="Days/Hours"><%= food_truck.days_hours %></:col>
+  <:action :let={{_id, food_truck}}>
+    <div class="sr-only">
+      <.link navigate={~p"/food_trucks/#{food_truck}"}>Show</.link>
+    </div>
+  </:action>
+</.table>
