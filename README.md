@@ -6,7 +6,7 @@ This app answers the question, "what's for lunch today?" by listing SF food truc
 ### Getting Started Steps
 
 ### About The Project
-~~As of late, the development work that I've been doing is quite similar to what this assessment is being asked for.~~ In the last few years, Terraform has become the first tool that I reach for when starting a greenfield project. Although it may seem like more than a few days was spent on this project by viewing the project's [Issues](https://github.com/marka2g/belly_bot/issues) page, I have Terraform to thank for a massive reduction on initial time-consuming tasks.
+In the last few years, Terraform has become the first tool that I reach for when starting a greenfield project. Although it may seem like more than a few days was spent on this project by viewing the project's [Issues](https://github.com/marka2g/belly_bot/issues) page, I have Terraform to thank for a massive reduction on initial time-consuming tasks.
 
 #### Project Management
 I used Terraform to create a [project management scaffold](https://github.com/marka2g/belly_bot/tree/main/modules/integrations/github/project_management) that initializes the project with reasonable [Issues](https://github.com/marka2g/belly_bot/issues), [Labels](https://github.com/marka2g/belly_bot/labels), and [Milestones](https://github.com/marka2g/belly_bot/milestones). I love this because it removes the daunting writers block associated with getting started.
