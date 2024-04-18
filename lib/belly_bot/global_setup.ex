@@ -11,7 +11,7 @@ defmodule BellyBot.GlobalSetup do
 
   def seed_food_trucks() do
     Repo.delete_all(FoodTruck)
-    
+
     food_trucks_data = Req.get!(@food_truck_endpoint).body
 
     food_trucks =
@@ -27,7 +27,10 @@ defmodule BellyBot.GlobalSetup do
         end
 
       days_hours = if truck |> Map.has_key?(:dayshours), do: truck.dayshours, else: ""
-      street = if truck |> Map.has_key?(:locationdescription), do: truck.locationdescription, else: ""
+
+      street =
+        if truck |> Map.has_key?(:locationdescription), do: truck.locationdescription, else: ""
+
       facility_type = if truck |> Map.has_key?(:facilitytype), do: truck.facilitytype, else: ""
 
       attrs = %{
