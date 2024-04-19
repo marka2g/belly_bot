@@ -1,6 +1,11 @@
 **/.DS_Store
 /scratches
 
+## SOPS
+secrets/**/.* 
+**/key.txt
+## SOPS
+
 ## Terraform
 # Local .terraform directories
 **/.terraform/*
