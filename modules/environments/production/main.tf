@@ -17,10 +17,15 @@ module "repository_secrets" {
   github_owner = "marka2g"
 }
 
+module "contributions" {
+  source = "../../../modules/integrations/github/contributions" 
+  repository = "belly_bot"
+  github_owner = "marka2g"
+  status_checks = [
+      "Compile with mix test, format, dialyzer & unused deps check"
+  ] 
+}
+
 output "swarm_ssh_command" {
   value = module.swarm.ssh_command
 }
-
-# output "age_public_key" {
-#   value = module.sops.public_key
-# }
