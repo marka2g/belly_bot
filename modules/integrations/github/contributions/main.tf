@@ -19,8 +19,8 @@ resource "github_branch_protection" "main" {
     strict   = true
     contexts = var.status_checks
   }
-  required_pull_request_reviews {
-    require_code_owner_reviews      = false
-    # required_approving_review_count = 1
-  }
+  # required_pull_request_reviews {
+  #   require_code_owner_reviews        = false
+  #   required_approving_review_count = 1
+  # }
 }
