@@ -1,6 +1,11 @@
 services:
   db:
     image: postgres:16.2
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgrespassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+    secrets:
+      - postgrespassword
     healthcheck:
       test: ["CMD", "pg_isready", "--username=postgres"]
       interval: 10s
@@ -13,9 +18,6 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-    environment:
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -30,9 +32,12 @@ services:
         max_attempts: 3
         window: 120s
     environment:
-      DATABASE_URL: ecto://postgres:postgres@db/postgres
-      SECRET_KEY_BASE: kMydmgltmXlS+ZfhBqCxwb5JQUaCMPyl04uXVTcsZMJBTcEk4TphMeHxf+eLxspt
+      DATABASE_URL_FILE: /run/secrets/databaseurl
+      SECRET_KEY_BASE_FILE: /run/secrets/secretkeybase
       PHX_HOST: "localhost"
+    secrets:
+      - databaseurl
+      - secretkeybase
     ports:
       - 4000:4000
     command: >
@@ -40,5 +45,14 @@ services:
               bin/server" 
     depends_on:
       - db
+
 volumes:
   db_data:
+
+secrets:
+  postgrespassword:
+    file: ./secrets/${ENVIRONMENT}/.postgrespassword
+  secretkeybase:
+    file: ./secrets/${ENVIRONMENT}/.secretkeybase
+  databaseurl:
+    file: ./secrets/${ENVIRONMENT}/.databaseurl
