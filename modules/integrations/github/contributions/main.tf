@@ -13,7 +13,7 @@ provider "github" {
 resource "github_branch_protection" "main" {
   repository_id = var.repository
   pattern        = "main"
-  # lock_branch    = true
+  lock_branch    = true
   enforce_admins = true
   required_status_checks {
     strict   = true
@@ -21,6 +21,6 @@ resource "github_branch_protection" "main" {
   }
   required_pull_request_reviews {
     require_code_owner_reviews      = false
-    required_approving_review_count = 1
+    # required_approving_review_count = 1
   }
 }
