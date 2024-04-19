@@ -1,21 +1,20 @@
 terraform {
   required_providers {
-    # https://registry.terraform.io/providers/hashicorp/aws/latest
     aws = {
       source  = "hashicorp/aws"
       version = "5.45.0"
     }
-    # https://registry.terraform.io/providers/hashicorp/tls/latest
-    # 4. Creating a Key Pair with Local and TLS Providers
     tls = {
       source = "hashicorp/tls"
       version = "4.0.5"
     }
-    # https://registry.terraform.io/providers/hashicorp/local/latest
     local = {
       source = "hashicorp/local"
       version = "2.5.1"
-
+    }
+    github = {
+      source = "integrations/github"
+      version = "6.2.1"
     }
   }
 }
@@ -57,13 +56,13 @@ data "aws_ami" "amazon_linux_docker" {
     name   = "name"
     values = ["amazon-linux-docker*"]
   }
-  # find with aws cli: aws sts get-caller-identity
   # owners = ["AWS_ACC_ID_UNSET"]
+  # find with aws cli: aws sts get-caller-identity
   owners = ["447130666878"]
 }
 
 resource "aws_security_group" "swarm_sg" {
-  description            = "launch-wizard-2 created 2024-04-17T22:18:12.426Z"
+  description    = "launch-wizard-2 created 2024-04-17T22:18:12.426Z"
   egress = [
     {
       cidr_blocks = [

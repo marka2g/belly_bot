@@ -51,8 +51,11 @@ volumes:
 
 secrets:
   postgrespassword:
-    file: ./secrets/${ENVIRONMENT}/.postgrespassword
+    file: ./secrets/.postgrespassword
+    # file: ./secrets/${ENVIRONMENT}/.postgrespassword
   secretkeybase:
-    file: ./secrets/${ENVIRONMENT}/.secretkeybase
+    file: ./secrets/.secretkeybase
+    # file: ./secrets/${ENVIRONMENT}/.secretkeybase
   databaseurl:
-    file: ./secrets/${ENVIRONMENT}/.databaseurl
+    file: ./secrets/.databaseurl
+    # file: ./secrets/${ENVIRONMENT}/.databaseurl
