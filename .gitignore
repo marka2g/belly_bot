@@ -2,7 +2,7 @@
 /scratches
 
 ## SOPS
-secrets/**/.* 
+secrets/**/.*
 **/key.txt
 ## SOPS
 

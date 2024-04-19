@@ -1,6 +1,8 @@
 # BellyBot
 ## [Engineering Assessment](https://github.com/peck/engineering-assessment) - The BellyBot Food Truck App
 
+![CI/CD](https://github.com/marka2g/belly_bot/actions/workflows/ci_cd.yml/badge.svg)
+
 This app answers the question, "what's for lunch today?" by listing SF food trucks, their known street location, and the types of foods they serve. The goal is to showcases variety and allow the user to discover new places to eat.
 
 comment on:
