@@ -1,12 +1,13 @@
+
 variable "secrets" {
-  description = "A map of the belly_bot repo secrets" 
+  description = "A map of secrets to be created for a certain repository" 
   type = map(string)
 }
 variable "github_owner" {
-  description = "GH Owner: BellyBot Inc." 
+  description = "The name of the GitHub organization." 
   type = string
 }
 variable "repository" {
-  description = "belly_bot repository" 
+  description = "The name of the GitHub repository." 
   type = string
 }
