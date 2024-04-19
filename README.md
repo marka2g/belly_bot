@@ -1,11 +1,18 @@
 # BellyBot
 ## [Engineering Assessment](https://github.com/peck/engineering-assessment) - The BellyBot Food Truck App
 
-![CI/CD](https://github.com/marka2g/belly_bot/actions/workflows/ci_cd.yml/badge.svg)
+![CI/CD Build Status](https://github.com/marka2g/belly_bot/workflows/ci_cd.yaml/badge.svg)
 
 This app answers the question, "what's for lunch today?" by listing SF food trucks, their known street location, and the types of foods they serve. The goal is to showcases variety and allow the user to discover new places to eat.
 
 comment on:
+>
+> 34.245.225.188
+>
+> live deployed: ec2-34.245.225.188.eu-west-1.compute.amazonaws.com:4000
+>
+> github main branch protection
+>
 > SOPS - symmetric key encryption to allow the sharing of secrets among team members
 >
 >"confidence" and "ownership" ch 7. "empowering yourself to take responsibility for the code you submit"
