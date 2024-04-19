@@ -3,9 +3,10 @@
 
 This app answers the question, "what's for lunch today?" by listing SF food trucks, their known street location, and the types of foods they serve. The goal is to showcases variety and allow the user to discover new places to eat.
 
-
-"confidence" and "ownership" ch 7. "empowering yourself to take responsibility for the code you submit"
- SOPS - symmetric key encryption to allow the sharing of secrets among team members
+comment on:
+> SOPS - symmetric key encryption to allow the sharing of secrets among team members
+>
+>"confidence" and "ownership" ch 7. "empowering yourself to take responsibility for the code you submit"
 
 ### Getting Started Steps
 
