@@ -1,7 +1,10 @@
+# in .github/actions/deploy/action.yaml
+
 # Composite Github Action for Deployment
 ## lists the 6 different secret variables required to run your deploy.sh script and an image tag.
 name: "Continuous Deployment to Remote Docker Swarm"
 description: "Deploys into a Docker Swarm when given a certain image tag"
+
 # convention for composite actions is that secrets inputs are always defined in lowercase.
 inputs:
   image_tag:
@@ -32,14 +35,11 @@ runs:
   steps:
     - uses: actions/checkout@v4
 
-    # install sops into runner env
-    - name: Install SOPS into runner env for setup 
+    - name: Deploy Action - Setup SOPS
       uses: nhedger/setup-sops@v2
       with:
         version: 3.7.3
-    
-    # install age into runner env
-    - name: Install age into runner env for setup 
+
     - uses: alessiodionisi/setup-age-action@v1.3.0
       with:
         version: ^1.1.0

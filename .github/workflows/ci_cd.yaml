@@ -1,6 +1,6 @@
-# in workflows/ci_cd.yaml
+# in .github/workflows/ci_cd.yaml
 
-name: CI/CD Elixir
+name: CI/CD
 
 on:
   push:
@@ -13,6 +13,7 @@ env:
   OTP_VERSION: 26.2.4
   ELIXIR_VERSION: 1.16.2
   MIX_ENV: test
+  GHCR_IMAGE_BASE: ghcr.io/marka2g/belly_bot
 
 jobs:
   ci:
@@ -87,6 +88,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: ci
     name: Build Docker Image & Push to ghcr.io
+    outputs:
+      unique_docker_tag: ${{ steps.get-unique-docker-tag.outputs.sha_tag }}
     steps:
       - uses: actions/checkout@v3
 
@@ -103,7 +106,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/marka2g/belly_bot
+            ${{ env.GHCR_IMAGE_BASE }}
           tags: |
             type=ref,event=pr
             type=raw,value=latest,enable={{is_default_branch}}
@@ -117,8 +120,8 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          cache-from: type=registry,ref=ghcr.io/marka2g/belly_bot:cache
-          cache-to: type=registry,ref=ghcr.io/marka2g/belly_bot:cache,mode=max
+          cache-from: type=registry,ref=${{ env.GHCR_IMAGE_BASE }}:cache
+          cache-to: type=registry,ref=${{ env.GHCR_IMAGE_BASE }}:cache,mode=max
           # three different possible tags: :main, :latest, unique commit :sha-xxx
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
@@ -138,12 +141,12 @@ jobs:
                       | tr '\n' ' ' \
                       | awk '{print $1}')
           echo "sha_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-          
+   
   deploy:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build-push
-    name: Deploy application
+    name: Deploy Application
     steps:
       - uses: actions/checkout@v4
 
