@@ -33,7 +33,7 @@ if [ -z "$GITHUB_TOKEN" ] || [ -z "$GITHUB_USER" ]; then
 fi
 
 # set default variables
-IMAGE=${1:-"ghcr.io/beamops/belly_bot:latest"}
+IMAGE=${1:-"ghcr.io/marka2g/belly_bot:latest"}
 AWS_REGION="eu-west-1"
 INSTANCE_TAG_NAME="docker-swarm-manager"
 STACK_NAME="belly_bot"
