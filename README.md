@@ -7,7 +7,7 @@ This app answers the question, "what's for lunch today?" by listing SF food truc
 
 comment on:
 >
-> live deployed: ec2-34.245.225.188.eu-west-1.compute.amazonaws.com:4000
+> live deployed: ec2-[SOME_IP].eu-west-1.compute.amazonaws.com:4000
 >
 > github main branch protection
 >
