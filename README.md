@@ -5,7 +5,6 @@
 
 This app answers the question, "what's for lunch today?" by listing SF food trucks, their known street location, and the types of foods they serve. The goal is to showcases variety and allow the user to discover new places to eat.
 
-comment on:
 >
 > live deployed: ec2-[SOME_IP].eu-west-1.compute.amazonaws.com:4000
 >
