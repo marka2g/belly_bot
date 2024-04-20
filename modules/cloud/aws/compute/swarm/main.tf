@@ -1,3 +1,5 @@
+# in modules/cloud/aws/compute/swarm/main.tf
+
 terraform {
   required_providers {
     aws = {
@@ -11,10 +13,6 @@ terraform {
     local = {
       source = "hashicorp/local"
       version = "2.5.1"
-    }
-    github = {
-      source = "integrations/github"
-      version = "6.2.1"
     }
   }
 }
@@ -33,21 +31,6 @@ data "aws_subnets" "main_subnets" {
   }
 }
 
-resource "tls_private_key" "rsa" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "aws_key_pair" "deployer_key" {
-  key_name   = "swarm-key"
-  public_key = tls_private_key.rsa.public_key_openssh
-}
-
-resource "local_sensitive_file" "private_key" {
-  filename        = var.private_key_path
-  content         = tls_private_key.rsa.private_key_pem
-  file_permission = "0400"
-}
 
 data "aws_ami" "amazon_linux_docker" {
   most_recent = true
@@ -56,13 +39,51 @@ data "aws_ami" "amazon_linux_docker" {
     name   = "name"
     values = ["amazon-linux-docker*"]
   }
-  # owners = ["AWS_ACC_ID_UNSET"]
   # find with aws cli: aws sts get-caller-identity
   owners = ["447130666878"]
 }
 
+resource "tls_private_key" "rsa" { 
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_sensitive_file" "private_key" {
+  content         = tls_private_key.rsa.private_key_pem
+  filename        = var.private_key_path
+  file_permission = "0400"
+}
+
+resource "aws_key_pair" "deployer_key" {
+  key_name = "swarm-key-us-west"
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+
+resource "aws_instance" "belly_swarm" {
+  ami                                 = data.aws_ami.amazon_linux_docker.id
+  key_name                            = aws_key_pair.deployer_key.key_name
+  subnet_id                           = data.aws_subnets.main_subnets.ids[1]
+  instance_type                       = "t2.micro"
+  availability_zone                   = "us-west-1c"
+  tags                                = {
+    "Name" = "docker-swarm-manager"
+  }
+  associate_public_ip_address          = true
+  vpc_security_group_ids               = [
+      aws_security_group.swarm_sg.id,
+  ]
+  user_data                             = <<-EOF
+    #!/bin/bash
+    docker swarm init
+  EOF
+}
+
 resource "aws_security_group" "swarm_sg" {
-  description    = "launch-wizard-2 created 2024-04-17T22:18:12.426Z"
+  description            = "launch-wizard-3 created 2024-04-20T01:34:25.804Z"
+  name                   = "launch-wizard-3"
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                = data.aws_vpc.main.id
   egress = [
     {
       cidr_blocks = [
@@ -106,33 +127,4 @@ resource "aws_security_group" "swarm_sg" {
       to_port          = 4000
     },
   ]
-  tags        = {}
-  tags_all    = {}
-  # vpc_id    = "vpc-0021bbe35d223bc80"
-  vpc_id      = data.aws_vpc.main.id
-}
-
-resource "aws_instance" "belly_swarm" {
-  # ami               = "ami-0d421d84814b7d51c"
-  ami               = data.aws_ami.amazon_linux_docker.id
-  availability_zone = "eu-west-1b"
-  key_name          = aws_key_pair.deployer_key.key_name
-  subnet_id         = data.aws_subnets.main_subnets.ids[1]
-  user_data         = <<-EOF
-              #!/bin/bash
-
-              docker swarm init
-              EOF
-  instance_type     = "t2.micro"
-  tags = {
-    "Name" = "docker-swarm-manager"
-  }
-  vpc_security_group_ids  = [
-    aws_security_group.swarm_sg.id,
-  ]
-}
-
-output "ssh_command" {
-  value       = "ssh -i ${var.private_key_path} ec2-user@${aws_instance.belly_swarm.public_ip}"
-  description = "The SSH command to connect to the instance."
 }

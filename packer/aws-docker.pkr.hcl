@@ -27,13 +27,6 @@ source "amazon-ebs" "base" {
 build {
   sources = ["source.amazon-ebs.base"]
   provisioner "shell" { 
-    // inline = [
-    //   "sudo dnf update -y",
-    //   "sudo dnf install -y docker",
-    //   "sudo systemctl start docker",
-    //   "sudo systemctl enable docker",
-    //   "sudo usermod -a -G docker ec2-user", "sudo dnf install -y nmap"
-    // ] 
     script = "setup.sh"
     # run script after cloud-init finishes to avoid race conditions 
     execute_command = "cloud-init status --wait && sudo -E sh '{{ .Path }}'"

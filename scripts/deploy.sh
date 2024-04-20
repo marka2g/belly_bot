@@ -3,7 +3,7 @@
 # set exit and logging
 set -ex
 
-# check for required tools (AWS CLI and Docker) and exit if not found
+# ensure or exit if AWS CLI and Docker CLI tools not installed
 command -v aws >/dev/null 2>&1 || {
   echo "Error: AWS CLI not found. Please install it."; exit 1;
 }
@@ -11,7 +11,7 @@ command -v docker >/dev/null 2>&1 || {
   echo "Error: Docker not found. Please install it."; exit 1;
 }
 
-# check that the required env vars have been passed and exit if not
+# ensure or exit if required env vars not passed in.
 if [ -z "$SOPS_AGE_KEY_FILE" ]; then
   echo "Error: Please set the SOPS_AGE_KEY_FILE environment variable."
   exit 1
@@ -34,7 +34,7 @@ fi
 
 # set default variables
 IMAGE=${1:-"ghcr.io/marka2g/belly_bot:latest"}
-AWS_REGION="eu-west-1"
+AWS_REGION="us-west-1"
 INSTANCE_TAG_NAME="docker-swarm-manager"
 STACK_NAME="belly_bot"
 
