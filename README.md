@@ -77,5 +77,5 @@ That said, I've grown fond of Terraform, particularly for greenfield projects. B
 ---
 
 ### EC2 Production Status
-Currently, an instance is running on EC2, and at the time of writing, it is live at this address: http://ec2-54-193-68-139.us-west-1.compute.amazonaws.com:4000. I submitted an [issue here](https://github.com/marka2g/belly_bot/issues/36) to investigate why the Docker Swarm EC2 instance and volume are not communicating. 
+Currently, an EC2 instance is running on AWS, and at the time of writing, it is live at this address: http://ec2-54-193-68-139.us-west-1.compute.amazonaws.com:4000. I submitted an [issue here](https://github.com/marka2g/belly_bot/issues/36) to investigate why the Docker Swarm EC2 instance and volume are not communicating. 
 
