@@ -36,7 +36,10 @@ Currently, there are two ways to deploy this app to production:
     - `GITHUB_USER`
 > example:
 >>```bash
->>$ PRIVATE_KEY_PATH=./environments/production/dynamic_private_key.pem \ SOPS_AGE_KEY_FILE=./environments/production/key.txt \ GITHUB_USER=marka2g \ ./scripts/deploy.sh
+>>$ PRIVATE_KEY_PATH=./environments/production/dynamic_private_key.pem \
+>>SOPS_AGE_KEY_FILE=./environments/production/key.txt \
+>>GITHUB_USER=marka2g \
+>>./scripts/deploy.sh
 >>```
 
 ---
