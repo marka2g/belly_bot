@@ -1,46 +1,64 @@
-# BellyBot
-## [Engineering Assessment](https://github.com/peck/engineering-assessment) - The BellyBot Food Truck App
+# The BellyBot Food Truck App
+## [Engineering Assessment](https://github.com/peck/engineering-assessment)
 
-![CI/CD Build Status](https://github.com/marka2g/belly_bot/workflows/ci_cd.yaml/badge.svg)
+![Build Status](https://github.com/marka2g/belly_bot/actions/workflows/ci_cd.yaml/badge.svg)
 
-This app answers the question, "what's for lunch today?" by listing SF food trucks, their known street location, and the types of foods they serve. The goal is to showcases variety and allow the user to discover new places to eat.
+This app answers the question, "What's for lunch today?" by providing a list of San Francisco food trucks along with their known street locations and the types of foods they serve. The goal is to showcase a variety of options and help users discover new places to eat.
 
+### Running the Code
+> You can pull down the repo and run it locally:
+>```bash
+>$ git clone git@github.com:marka2g/belly_bot.git
+>$ cd belly_bot
 >
-> live deployed: ec2-[SOME_IP].eu-west-1.compute.amazonaws.com:4000
+># Run the server with a REPL
+>$ iex -S mix phx.server
+>```
+
+> And then, seed some Food Truck data:
+>```elixir
+>iex> BellyBot.GlobalSetup.seed_food_trucks()
 >
-> github main branch protection
->
->
->ch7 "confidence" and "ownership" ch 7. "empowering yourself to take responsibility for the code you submit"
->
-> p226 "declarative options" using encrypted secrets - maintain environment integrity
->
-> SOPS - symmetric key encryption to allow the sharing of secrets among team members
+># check the food truck count
+>iex> BellyBot.FoodTrucks.list_food_trucks() |> Enum.count()
+>```
 
-### Getting Started Steps
+### Deploying the App
+Currently, there are two way to deploy this app to production:
 
-### About The Project
-In the last few years, Terraform has become the first tool that I reach for when starting a greenfield project. Although it may seem like more than a few days was spent on this project by viewing the project's [Issues](https://github.com/marka2g/belly_bot/issues) page, I have Terraform to thank for a massive reduction on initial time-consuming tasks.
+1. Continuous Delivery → Once a PR is merged into the `main` branch and CI checks run successfully, the composite `actions/deploy/action.yaml` will deploy the app to a docker swarm on AWS.
+2. Manually → The `./scripts/deploy.sh` script can also be run with a key file(_available upon request_).
+  - the script requires three environment variables to be passed in:
+    - `PRIVATE_KEY_PATH` located in the `./environments/production` directory
+    - `SOPS_AGE_KEY_FILE` key file
+    - `GITHUB_USER`
+> example:
+>>```bash
+>>$ PRIVATE_KEY_PATH=./environments/production/dynamic_private_key.pem SOPS_AGE_KEY_FILE=./environments/production/key.txt GITHUB_USER=marka2g ./scripts/deploy.sh
+>>```
 
-#### Project Management
-I used Terraform to create a [project management scaffold](https://github.com/marka2g/belly_bot/tree/main/modules/integrations/github/project_management) that initializes the project with reasonable [Issues](https://github.com/marka2g/belly_bot/issues), [Labels](https://github.com/marka2g/belly_bot/labels), and [Milestones](https://github.com/marka2g/belly_bot/milestones). I love this because it removes the daunting writers block associated with getting started.
+### Development Status
+Start by checking the repo's [Milestones Panel](https://github.com/marka2g/belly_bot/milestones), which serves as the perfect starting point. Here, you'll discover various [issues](https://github.com/marka2g/belly_bot/issues) that track the project's progress. 
 
-#### CI
+In my overall allocation of time, the `belly_bot` Phoenix app received the least attention, and there are a few reasons for this. Firstly, I find the process of building an app with Phoenix Live View and app development in general to be the most enjoyable. However, I've learned over the years that planning ahead and addressing less enjoyable tasks are crucial for the project's longevity and momentum. Taking the time to chart a clear path forward makes development more focused, and prioritizing issues via milestones enables the team to work more efficiently.
 
-#### CD & Production
+That said, I've grown fond of Terraform, particularly for greenfield projects. Besides its ability to magically assist with  [provisioning platform resources](https://github.com/marka2g/belly_bot/tree/main/environments/production), I deeply appreciate the [project management](https://github.com/marka2g/belly_bot/tree/main/modules/integrations/github/project_management) tools it provides. Terraform has given me the freedom and confidence to pause, think, and plan before diving into coding, ultimately enhancing the product's quality. Furthermore, it has bolstered my ability to estimate time and prioritize tasks more effectively.
 
-> ch 7. “Fail early, fail often, but always fail forward.” Using a CD pipeline is crucial for achieving this because the fact that any piece of code will be automatically delivered to production means that you’ll be more careful about what you ship and how you ship it. This will foster your confidence and make you more resilient. It will also encourage you to submit smaller features and babysit a deployment to ensure that it works as expected. Then if a bug arises, you’ll submit a new PR to fix the concrete issue.
+### EC2 Production Status
+Currently, an instance is running on EC2, and at the time of writing, it is live at this address: http://ec2-54-193-68-139.us-west-1.compute.amazonaws.com:4000. I submitted an [issue here](https://github.com/marka2g/belly_bot/issues/36) to investigate why the Docker Swarm EC2 instance and volume are not communicating. 
 
+### The Technology Stack
+The BellyBot stack consists of:
+```
+Project Management:
+→ Terraform for Github Milestones & Issues 
 
-#### Production
-Terraform was also used to provision a single-node AWS/EC2 Instance/Security Group/VPC/Subnet/AMI production environment that is backed by a [Docker container](https://github.com/users/marka2g/packages/container/package/belly_bot) which is hosted at `ghcr.io`. Yikes, what a mouthful, however, I hope a patterns are obviously stated - building out a version controlled backed infrastructure allows us to replicate an environment that can be repeated and adequately maintained. Infrastructure-as-code has really changed my perspective on the Development and DevOps process. I don't yet claim expertise but am certain that a production-ready solution requires a consistent and dependable foundation of patterns.
+Application:
+→ web: Elixir/Phoenix Live View
+→ db: Postgres 16
 
-#### The BellyBot App
-Overall, I spent the least amount of time on the actual `belly_bot` Phoenix app. I did this for a few reasons. First, building an app wth Phoenix Live View and app development in general is the most enjoyable part of the process for me. However, over the years, I've learned that planning ahead and tackling the less fun tasks pay dividends toward the longevity and momentum a the project. When taking time to plan out a path forward, development becomes much more focused and prioritizing issues via milestones allows the team to build more efficiently. In the github repo, you'll notice that about half of the initial issues created have been completed. There are more issues and milestones to add and complete as the project progresses.
+Platform:
+→ Docker Swarm to manage an AWS/EC2 Instance/Security Group/VPC/Subnet provisioned with Terraform
 
-> example of team consideration
-> in the dockerfile, `ENV ERL_FLAGS="+JPperf true"`
-> 
-
-
-~~#### The Tech Stack~~
+→ Packer with an Amazon Machine(Linux) Instance with Docker preinstalled.
+```
