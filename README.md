@@ -26,7 +26,7 @@ This app answers the question, "What's for lunch today?" by providing a list of 
 ---
 
 ### Running & Deploying the App
-Currently, there are two way to deploy this app to production:
+Currently, there are two ways to deploy this app to production:
 
 1. Continuous Delivery → Once a PR is merged into the `main` branch and CI checks run successfully, the composite `actions/deploy/action.yaml` will deploy the app to a docker swarm on AWS.
 2. Manually → The `./scripts/deploy.sh` script can also be run with a key file(_available upon request_).
