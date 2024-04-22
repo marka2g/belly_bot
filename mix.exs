@@ -61,6 +61,7 @@ defmodule BellyBot.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
+      {:libcluster, "~> 3.3"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
