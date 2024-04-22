@@ -23,23 +23,23 @@ defmodule BellyBot.Repo.Migrations.CreateFoodTrucks do
 
     create unique_index(:food_trucks, [:name])
 
-    flush()
+    # flush()
 
-    %BellyBot.FoodTrucks.FoodTruck{
-      name: "Ziaurehman Amini",
-      status: "REQUESTED",
-      location: %{
-        "human_address" => "{\"address\": \"\", \"city\": \"\", \"state\": \"\", \"zip\": \"\"}",
-        "latitude" => "37.794331003246846",
-        "longitude" => "-122.39581105302317"
-      },
-      facility_type: "Push Cart",
-      food_items: nil,
-      days_hours: nil,
-      street: "MARKET ST: DRUMM ST intersection",
-      lat: -122.39581105302317,
-      lng: 37.794331003246846,
-      schedule: "http://bsm.sfdpw.org/PermitsTracker/reports/report.aspx?title=schedule&report=rptSchedule&params=permit=15MFF-0159&ExportPDF=1&Filename=15MFF-0159_schedule.pdf"
-    } |> BellyBot.Repo.insert!(on_conflict: :nothing)
+    # %BellyBot.FoodTrucks.FoodTruck{
+    #   name: "Ziaurehman Amini",
+    #   status: "REQUESTED",
+    #   location: %{
+    #     "human_address" => "{\"address\": \"\", \"city\": \"\", \"state\": \"\", \"zip\": \"\"}",
+    #     "latitude" => "37.794331003246846",
+    #     "longitude" => "-122.39581105302317"
+    #   },
+    #   facility_type: "Push Cart",
+    #   food_items: nil,
+    #   days_hours: nil,
+    #   street: "MARKET ST: DRUMM ST intersection",
+    #   lat: -122.39581105302317,
+    #   lng: 37.794331003246846,
+    #   schedule: "http://bsm.sfdpw.org/PermitsTracker/reports/report.aspx?title=schedule&report=rptSchedule&params=permit=15MFF-0159&ExportPDF=1&Filename=15MFF-0159_schedule.pdf"
+    # } |> BellyBot.Repo.insert!(on_conflict: :nothing)
   end
 end
