@@ -7,10 +7,13 @@ defmodule BellyBot.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies, [])
+
     children = [
       BellyBotWeb.Telemetry,
       BellyBot.Repo,
       {DNSCluster, query: Application.get_env(:belly_bot, :dns_cluster_query) || :ignore},
+      {Cluster.Supervisor, [topologies, [name: BellyBot.ClusterSupervisor]]},
       {Phoenix.PubSub, name: BellyBot.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: BellyBot.Finch},
